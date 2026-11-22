@@ -1,0 +1,96 @@
+html
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nagad Khela - Khelo Ar Jito</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#0f172a;color:#fff;padding:15px}
+.header{text-align:center;background:linear-gradient(90deg,#ff0055,#ffaa00);padding:20px;border-radius:15px}
+.header h1{font-size:28px}
+.balance{background:#1e293b;margin:15px 0;padding:15px;border-radius:15px;text-align:center;border:2px solid #22c55e}
+.balance h2{color:#22c55e;font-size:32px}
+.card{background:#1e293b;padding:15px;border-radius:15px;margin-bottom:15px;text-align:center}
+button{background:#ff0055;color:#fff;border:none;padding:12px 20px;border-radius:10px;font-size:16px;font-weight:bold;width:100%;margin-top:10px}
+button:active{transform:scale(0.97)}
+input{width:100%;padding:12px;border-radius:10px;border:none;margin-top:10px;color:#000;text-align:center;font-size:16px}
+.green{background:#22c55e}
+.blue{background:#3b82f6}
+.yellow{background:#f59e0b;color:#000}
+#wheel{font-size:60px;margin:10px}
+.small{font-size:13px;color:#cbd5e1;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>🎮 NAGAD KHELA 🎮</h1>
+<p>Khelo Ar Jito Nagad Taka</p>
+</div>
+<div class="balance">
+<p>Tomar Balance</p>
+<h2>৳ <span id="bal">0</span></h2>
+<p class="small">100 Taka Hole Withdraw Korte Parba</p>
+</div>
+<div class="card">
+<h3>🎡 Spin Wheel</h3>
+<div id="wheel">🎡</div>
+<p id="spinResult">Spin Kore Jito 5 - 50 Taka</p>
+<button onclick="spin()">SPIN KORO</button>
+</div>
+<div class="card">
+<h3>🔢 Number Guess Khela</h3>
+<p>1 Theke 10 Er Moddhe Ekta Number Vabo</p>
+<input type="number" id="guess" placeholder="Tomar Number Likho">
+<button class="blue" onclick="checkGuess()">GUESS KORO</button>
+<p id="guessResult"></p>
+</div>
+<div class="card">
+<h3>👆 Tap Kore Taka Kamao</h3>
+<p>Button E Tap Korlei 1 Taka!</p>
+<button class="yellow" onclick="tap()">TAP KORO 👆</button>
+</div>
+<div class="card">
+<h3>💸 Withdraw - Nagad</h3>
+<input type="text" id="nagad" placeholder="Tomar Nagad Number - 01XXXXXXXXX">
+<button class="green" onclick="withdraw()">WITHDRAW KORO</button>
+<p id="wdResult"></p>
+<p class="small">Withdraw Request Gele 24 Ghontar Moddhe Taka Paba. Minimum 100 Taka.</p>
+</div>
+<div class="card">
+<p>🔥 Protidin Khelo, Bondhuder Share Koro Ar Beshi Taka Jito!</p>
+<button onclick="share()">SHARE KORO</button>
+</div>
+<script>
+let bal = localStorage.getItem('nagad_bal') ? parseInt(localStorage.getItem('nagad_bal')) : 0;
+function update(){ document.getElementById('bal').innerText = bal; localStorage.setItem('nagad_bal', bal); }
+update();
+function spin(){
+  let win = Math.floor(Math.random()*46)+5;
+  bal += win; update();
+  document.getElementById('spinResult').innerText = "Tumi Jitla ৳ " + win + " Taka! 🎉";
+  document.getElementById('wheel').innerText = "🎉";
+  setTimeout(()=>{document.getElementById('wheel').innerText="🎡"},1000);
+}
+function checkGuess(){
+  let g = document.getElementById('guess').value;
+  let secret = Math.floor(Math.random()*10)+1;
+  if(g == secret){ bal += 20; update(); document.getElementById('guessResult').innerText = "WOW! Thik Hoiche! +20 Taka 🎉 Secret Chilo " + secret; }
+  else { document.getElementById('guessResult').innerText = "Vul Hoiche! Secret Chilo " + secret + ". Abar Try Koro!"; }
+}
+function tap(){ bal += 1; update(); }
+function withdraw(){
+  let n = document.getElementById('nagad').value;
+  if(n.length < 11){ document.getElementById('wdResult').innerText = "Sothik Nagad Number Dao!"; return; }
+  if(bal < 100){ document.getElementById('wdResult').innerText = "Minimum 100 Taka Lagbe! Tomar Ache " + bal + " Taka"; return; }
+  document.getElementById('wdResult').innerText = "Withdraw Request Geche! " + bal + " Taka " + n + " Number E Jabe. 24 Ghonta Wait Koro.";
+  bal = 0; update();
+}
+function share(){
+  let text = "Nagad Khela Khelo Ar Taka Jito! " + window.location.href;
+  if(navigator.share){ navigator.share({text:text}); } else { alert(text); }
+}
+</script>
+</body>
+</html>
